@@ -48,33 +48,48 @@
     return audioCtx;
   }
 
+  // Caps overlapping clicks/thuds when several dice roll at once so it
+  // doesn't turn into a wall of noise with 5+ dice.
+  const TICK_MIN_GAP = 55;
+  const LAND_MIN_GAP = 45;
+  let lastTickAt = 0;
+  let lastLandAt = 0;
+
   function playTick() {
+    const now = performance.now();
+    if (now - lastTickAt < TICK_MIN_GAP) return false;
     const ctx = ensureAudioCtx();
-    if (!ctx) return;
+    if (!ctx) return false;
+    lastTickAt = now;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "square";
     osc.frequency.value = 160 + Math.random() * 140;
-    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.setValueAtTime(0.09, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
     osc.connect(gain).connect(ctx.destination);
     osc.start();
     osc.stop(ctx.currentTime + 0.05);
+    return true;
   }
 
   function playLand() {
+    const now = performance.now();
+    if (now - lastLandAt < LAND_MIN_GAP) return false;
     const ctx = ensureAudioCtx();
-    if (!ctx) return;
+    if (!ctx) return false;
+    lastLandAt = now;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "triangle";
     osc.frequency.setValueAtTime(220, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.13);
-    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.setValueAtTime(0.17, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
     osc.connect(gain).connect(ctx.destination);
     osc.start();
     osc.stop(ctx.currentTime + 0.16);
+    return true;
   }
 
   function updateMuteBtn() {
@@ -374,8 +389,7 @@
       die.value = randomFrom(pool);
       updateFaceDisplay(node, die);
       updateSumDisplay();
-      playTick();
-      vibrate(12);
+      if (playTick()) vibrate(12);
       if (performance.now() - startTime >= duration) {
         clearInterval(cycle);
         die.value = randomFrom(pool);
@@ -383,8 +397,7 @@
         updateSumDisplay();
         face.classList.remove("is-rolling");
         face.classList.add("just-landed");
-        playLand();
-        vibrate(35);
+        if (playLand()) vibrate(35);
         rollingIds.delete(id);
         if (!silent) saveDice();
       }
