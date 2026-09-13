@@ -392,6 +392,16 @@ select.btn option {
   padding: 0.8rem;
 }
 
+.app-footer p {
+  margin: 0.2rem 0;
+}
+
+.app-footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .toast {
   position: fixed;
   left: 50%;
