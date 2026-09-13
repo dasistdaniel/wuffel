@@ -2,7 +2,7 @@
 
 Eine bunte, animierte Würfel-App als PWA – für spontane Spiele unterwegs.
 
-**Live:** https://dasistdaniel.github.io/wuffel/
+**Live:** https://wuffel.nichtregistriert.de/
 
 ## Screenshots
 
