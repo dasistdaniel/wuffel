@@ -28,21 +28,26 @@
     </div>
 
     <div class="toolbar">
-      <button id="roll-all-btn" class="btn btn-primary">🎲 Alle würfeln</button>
-      <div class="stepper">
-        <button id="remove-die-btn" class="btn btn-secondary stepper-btn" title="Würfel entfernen" aria-label="Würfel entfernen">➖ Würfel</button>
-        <button id="add-die-btn" class="btn btn-secondary stepper-btn" title="Würfel hinzufügen" aria-label="Würfel hinzufügen">➕ Würfel</button>
+      <button id="roll-all-btn" class="btn btn-primary btn-large">🎲 Alle würfeln</button>
+
+      <div class="stepper" role="group" aria-label="Anzahl Würfel">
+        <button id="remove-die-btn" class="stepper-btn" aria-label="Würfel entfernen">−</button>
+        <span class="stepper-count"><span id="dice-count">1</span> Würfel</span>
+        <button id="add-die-btn" class="stepper-btn" aria-label="Würfel hinzufügen">+</button>
       </div>
-      <select id="preset-select" class="btn btn-ghost" aria-label="Vorlage wählen">
-        <option value="" selected disabled>📋 Vorlagen</option>
-        <option value="w6x1">1 × W6</option>
-        <option value="w6x2">2 × W6</option>
-        <option value="kniffel">Kniffel (5 × W6)</option>
-        <option value="slf">Stadt-Land-Fluss (Buchstabe)</option>
-      </select>
-      <button id="reset-btn" class="btn btn-ghost" title="Auf einen Standard-W6 zurücksetzen">↺ Zurücksetzen</button>
-      <button id="settings-btn" class="btn btn-ghost">⚙️ Einstellungen</button>
-      <button id="mute-btn" class="btn btn-ghost" title="Ton &amp; Vibration an/aus" aria-label="Ton &amp; Vibration an/aus">🔊</button>
+
+      <div class="toolbar-utility">
+        <select id="preset-select" class="btn btn-ghost" aria-label="Vorlage wählen">
+          <option value="" selected disabled>📋 Vorlagen</option>
+          <option value="w6x1">1 × W6</option>
+          <option value="w6x2">2 × W6</option>
+          <option value="kniffel">Kniffel (5 × W6)</option>
+          <option value="slf">Stadt-Land-Fluss (Buchstabe)</option>
+        </select>
+        <button id="settings-btn" class="btn btn-ghost">⚙️ Einstellungen</button>
+        <button id="reset-btn" class="btn btn-ghost" title="Auf einen Standard-W6 zurücksetzen">↺ Zurücksetzen</button>
+        <button id="mute-btn" class="btn btn-ghost" title="Ton &amp; Vibration an/aus" aria-label="Ton &amp; Vibration an/aus">🔊 Ton</button>
+      </div>
     </div>
   </main>
 

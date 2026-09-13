@@ -29,6 +29,7 @@
   const settingsCloseBtn = document.getElementById("settings-close-btn");
   const settingsListEl = document.getElementById("settings-list");
   const removeDieBtn = document.getElementById("remove-die-btn");
+  const diceCountEl = document.getElementById("dice-count");
 
   let colorCursor = 0;
   let dice = loadDice();
@@ -194,6 +195,7 @@
 
   function updateRemoveDieBtn() {
     removeDieBtn.disabled = dice.length <= 1;
+    diceCountEl.textContent = dice.length;
   }
 
   function buildDieCard(die) {
