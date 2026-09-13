@@ -1,4 +1,4 @@
-const CACHE_NAME = "wuffel-cache-v9";
+const CACHE_NAME = "wuffel-cache-v10";
 const APP_SHELL = [
   "./",
   "./index.html",

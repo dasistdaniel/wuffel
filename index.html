@@ -77,7 +77,7 @@
   <div id="settings-overlay" class="settings-overlay" hidden>
     <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
       <div class="settings-modal-header">
-        <h2 id="settings-modal-title">⚙️ Würfel-Einstellungen</h2>
+        <h2 id="settings-modal-title"><span class="wobble-icon">🎲</span> Würfel-Einstellungen</h2>
         <button id="settings-close-btn" class="modal-close" aria-label="Schließen">✕</button>
       </div>
       <div id="settings-list" class="settings-list"></div>
@@ -98,9 +98,10 @@
       <div class="settings-item-header">
         <span class="settings-item-swatch"></span>
         <span class="settings-item-title"></span>
+        <span class="settings-item-badge"></span>
       </div>
       <label class="settings-row">
-        Typ
+        <span class="settings-label">Typ</span>
         <select class="cfg-type">
           <option value="d4">W4</option>
           <option value="d6">W6</option>
@@ -113,21 +114,24 @@
         </select>
       </label>
       <label class="settings-row cfg-row-custom" hidden>
-        Von
+        <span class="settings-label">Von</span>
         <input class="cfg-min" type="number" />
       </label>
       <label class="settings-row cfg-row-custom" hidden>
-        Bis
+        <span class="settings-label">Bis</span>
         <input class="cfg-max" type="number" />
       </label>
       <label class="settings-row cfg-row-letters" hidden>
-        Buchstaben
+        <span class="settings-label">Buchstaben</span>
         <textarea class="cfg-letters" rows="2" spellcheck="false"></textarea>
       </label>
-      <label class="settings-row">
-        Farbe
-        <input class="cfg-color" type="color" />
-      </label>
+      <div class="settings-row">
+        <span class="settings-label">Farbe</span>
+        <div class="color-picker-row">
+          <div class="color-presets"></div>
+          <input class="cfg-color" type="color" title="Eigene Farbe wählen" />
+        </div>
+      </div>
     </div>
   </template>
 

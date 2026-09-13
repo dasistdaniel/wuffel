@@ -247,6 +247,7 @@
 
     const swatch = node.querySelector(".settings-item-swatch");
     const title = node.querySelector(".settings-item-title");
+    const badge = node.querySelector(".settings-item-badge");
     const typeSelect = node.querySelector(".cfg-type");
     const minInput = node.querySelector(".cfg-min");
     const maxInput = node.querySelector(".cfg-max");
@@ -254,14 +255,41 @@
     const colorInput = node.querySelector(".cfg-color");
     const customRows = node.querySelectorAll(".cfg-row-custom");
     const lettersRow = node.querySelector(".cfg-row-letters");
+    const presetsEl = node.querySelector(".color-presets");
 
-    swatch.style.background = die.color;
+    function applyItemColor(color) {
+      node.style.setProperty("--item-color", color);
+      swatch.style.background = color;
+      presetsEl.querySelectorAll(".color-preset-btn").forEach((btn) => {
+        btn.classList.toggle("is-active", btn.dataset.color === color);
+      });
+    }
+
+    COLOR_PALETTE.forEach((color) => {
+      const swatchBtn = document.createElement("button");
+      swatchBtn.type = "button";
+      swatchBtn.className = "color-preset-btn";
+      swatchBtn.style.background = color;
+      swatchBtn.dataset.color = color;
+      swatchBtn.setAttribute("aria-label", `Farbe ${color}`);
+      swatchBtn.addEventListener("click", () => {
+        die.color = color;
+        colorInput.value = color;
+        applyItemColor(color);
+        refreshDieCard(die);
+        saveDice();
+      });
+      presetsEl.appendChild(swatchBtn);
+    });
+
     title.textContent = `Würfel ${index + 1}`;
+    badge.textContent = TYPE_LABELS[die.type] || "?";
     typeSelect.value = die.type;
     minInput.value = die.min;
     maxInput.value = die.max;
     lettersArea.value = die.letters;
     colorInput.value = die.color;
+    applyItemColor(die.color);
 
     function syncVisibility() {
       const isCustom = typeSelect.value === "custom";
@@ -273,6 +301,7 @@
 
     typeSelect.addEventListener("change", () => {
       die.type = typeSelect.value;
+      badge.textContent = TYPE_LABELS[die.type] || "?";
       syncVisibility();
       die.value = null;
       refreshDieCard(die);
@@ -306,7 +335,7 @@
 
     colorInput.addEventListener("input", () => {
       die.color = colorInput.value;
-      swatch.style.background = die.color;
+      applyItemColor(die.color);
       refreshDieCard(die);
       saveDice();
     });
