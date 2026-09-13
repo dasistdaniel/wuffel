@@ -4,6 +4,12 @@ Eine bunte, animierte Würfel-App als PWA – für spontane Spiele unterwegs.
 
 **Live:** https://dasistdaniel.github.io/wuffel/
 
+## Screenshots
+
+| Startbildschirm | 20 Buchstabenwürfel | Einstellungen |
+|---|---|---|
+| ![Startbildschirm mit einem W6](screenshots/wuffel%201x.png) | ![20 Buchstabenwürfel gleichzeitig](screenshots/wuffel%2020x.png) | ![Würfel-Einstellungen mit Farbauswahl](screenshots/einstellungen.png) |
+
 ## Features
 
 - Ein oder mehrere Würfel gleichzeitig, jeder einzeln anklickbar
