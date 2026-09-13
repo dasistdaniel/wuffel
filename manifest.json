@@ -1,0 +1,32 @@
+{
+  "name": "Wuffel – der bunte Würfel",
+  "short_name": "Wuffel",
+  "description": "Bunte, animierte Würfel für unterwegs – W6, Sonderwürfel und Buchstabenwürfel für Stadt-Land-Fluss.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#7c3aed",
+  "theme_color": "#7c3aed",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

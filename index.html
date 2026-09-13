@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Wuffel 🎲</title>
+  <meta name="description" content="Wuffel – der bunte Würfel-Generator für unterwegs" />
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Wuffel" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1><span class="logo-dot">🎲</span> Wuffel</h1>
+    <p class="subtitle">Würfeln, wo ihr wollt</p>
+  </header>
+
+  <main>
+    <div id="dice-container" class="dice-container" aria-live="polite"></div>
+
+    <div class="toolbar">
+      <button id="roll-all-btn" class="btn btn-primary">🎲 Alle würfeln</button>
+      <button id="add-die-btn" class="btn btn-secondary">➕ Würfel</button>
+      <button id="reset-btn" class="btn btn-ghost" title="Auf einen Standard-W6 zurücksetzen">↺ Zurücksetzen</button>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>Installierbar als App 📱 · funktioniert offline</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <template id="die-template">
+    <div class="die-card">
+      <button class="die-remove" title="Würfel entfernen" aria-label="Würfel entfernen">✕</button>
+      <button class="die-face" type="button" aria-label="Würfel werfen">
+        <div class="die-face-inner"></div>
+      </button>
+      <div class="die-controls">
+        <span class="die-type-label"></span>
+        <details class="die-settings">
+          <summary>⚙️</summary>
+          <div class="settings-body">
+            <label class="settings-row">
+              Typ
+              <select class="cfg-type">
+                <option value="d4">W4</option>
+                <option value="d6" selected>W6</option>
+                <option value="d8">W8</option>
+                <option value="d10">W10</option>
+                <option value="d12">W12</option>
+                <option value="d20">W20</option>
+                <option value="custom">Zahlenbereich</option>
+                <option value="letters">Buchstaben</option>
+              </select>
+            </label>
+            <label class="settings-row cfg-row-custom" hidden>
+              Von
+              <input class="cfg-min" type="number" value="1" />
+            </label>
+            <label class="settings-row cfg-row-custom" hidden>
+              Bis
+              <input class="cfg-max" type="number" value="6" />
+            </label>
+            <label class="settings-row cfg-row-letters" hidden>
+              Buchstaben
+              <textarea class="cfg-letters" rows="2" spellcheck="false"></textarea>
+            </label>
+            <label class="settings-row">
+              Farbe
+              <input class="cfg-color" type="color" />
+            </label>
+          </div>
+        </details>
+      </div>
+    </div>
+  </template>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
