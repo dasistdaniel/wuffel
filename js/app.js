@@ -2,7 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "wuffel-dice-v1";
-  const DEFAULT_LETTERS = "ABCDEFGHIJKLMNOPRSTUVWZ"; // ohne Q, X, Y – klassisch für Stadt-Land-Fluss
+  const DEFAULT_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   const COLOR_PALETTE = [
     "#7c3aed", "#ec4899", "#f59e0b", "#10b981",
@@ -14,13 +14,70 @@
     custom: "Zahl", letters: "ABC"
   };
 
+  const MUTE_KEY = "wuffel-muted";
+
   const diceContainer = document.getElementById("dice-container");
   const dieTemplate = document.getElementById("die-template");
   const toastEl = document.getElementById("toast");
+  const muteBtn = document.getElementById("mute-btn");
 
   let colorCursor = 0;
   let dice = loadDice();
   let toastTimer = null;
+  let muted = localStorage.getItem(MUTE_KEY) === "1";
+  let audioCtx = null;
+
+  function ensureAudioCtx() {
+    if (muted) return null;
+    if (!audioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      audioCtx = new Ctx();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTick() {
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "square";
+    osc.frequency.value = 160 + Math.random() * 140;
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.05);
+  }
+
+  function playLand() {
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(220, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.13);
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.16);
+  }
+
+  function updateMuteBtn() {
+    muteBtn.textContent = muted ? "🔇" : "🔊";
+  }
+  updateMuteBtn();
+
+  muteBtn.addEventListener("click", () => {
+    muted = !muted;
+    localStorage.setItem(MUTE_KEY, muted ? "1" : "0");
+    updateMuteBtn();
+    if (!muted) ensureAudioCtx();
+  });
 
   function uid() {
     return Math.random().toString(36).slice(2, 10);
@@ -245,12 +302,14 @@
     const cycle = setInterval(() => {
       die.value = randomFrom(pool);
       updateFaceDisplay(node, die);
+      playTick();
       if (performance.now() - startTime >= duration) {
         clearInterval(cycle);
         die.value = randomFrom(pool);
         updateFaceDisplay(node, die);
         face.classList.remove("is-rolling");
         face.classList.add("just-landed");
+        playLand();
         rollingIds.delete(id);
         if (!silent) saveDice();
       }
