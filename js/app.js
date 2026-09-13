@@ -398,7 +398,10 @@
   }
 
   function addDie() {
-    const die = defaultDie();
+    const prev = dice[dice.length - 1];
+    const die = defaultDie(
+      prev ? { type: prev.type, min: prev.min, max: prev.max, letters: prev.letters } : {}
+    );
     dice.push(die);
     diceContainer.appendChild(buildDieCard(die));
     updateRemoveDieBtn();
