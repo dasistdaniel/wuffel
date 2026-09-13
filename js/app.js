@@ -157,6 +157,14 @@
   function renderAll() {
     diceContainer.innerHTML = "";
     dice.forEach((die) => diceContainer.appendChild(buildDieCard(die)));
+    updateRemoveButtonsVisibility();
+  }
+
+  function updateRemoveButtonsVisibility() {
+    const canRemove = dice.length > 1;
+    diceContainer.querySelectorAll(".die-remove").forEach((btn) => {
+      btn.hidden = !canRemove;
+    });
   }
 
   function buildDieCard(die) {
@@ -326,18 +334,17 @@
     const die = defaultDie();
     dice.push(die);
     diceContainer.appendChild(buildDieCard(die));
+    updateRemoveButtonsVisibility();
     saveDice();
     showToast("Würfel hinzugefügt");
   }
 
   function removeDie(id) {
-    if (dice.length <= 1) {
-      showToast("Mindestens ein Würfel muss bleiben");
-      return;
-    }
+    if (dice.length <= 1) return;
     const node = diceContainer.querySelector(`.die-card[data-id="${id}"]`);
     dice = dice.filter((d) => d.id !== id);
     saveDice();
+    updateRemoveButtonsVisibility();
     if (node) {
       node.classList.add("removing");
       node.addEventListener("animationend", () => node.remove(), { once: true });
