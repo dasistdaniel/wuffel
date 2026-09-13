@@ -276,11 +276,13 @@ main {
   border: none;
   background: rgba(255,255,255,0.25);
   color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 700;
+  min-width: 52px;
+  height: 34px;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
   cursor: pointer;
   transition: transform 0.1s ease, background 0.15s ease;
 }
