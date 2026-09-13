@@ -28,6 +28,7 @@
   const settingsOverlay = document.getElementById("settings-overlay");
   const settingsCloseBtn = document.getElementById("settings-close-btn");
   const settingsListEl = document.getElementById("settings-list");
+  const removeDieBtn = document.getElementById("remove-die-btn");
 
   let colorCursor = 0;
   let dice = loadDice();
@@ -176,7 +177,7 @@
   function renderAll() {
     diceContainer.innerHTML = "";
     dice.forEach((die) => diceContainer.appendChild(buildDieCard(die)));
-    updateRemoveButtonsVisibility();
+    updateRemoveDieBtn();
     updateSumDisplay();
   }
 
@@ -191,11 +192,8 @@
     sumDisplayEl.hidden = false;
   }
 
-  function updateRemoveButtonsVisibility() {
-    const canRemove = dice.length > 1;
-    diceContainer.querySelectorAll(".die-remove").forEach((btn) => {
-      btn.hidden = !canRemove;
-    });
+  function updateRemoveDieBtn() {
+    removeDieBtn.disabled = dice.length <= 1;
   }
 
   function buildDieCard(die) {
@@ -207,12 +205,6 @@
 
     const label = node.querySelector(".die-type-label");
     label.textContent = TYPE_LABELS[die.type] || "?";
-
-    const removeBtn = node.querySelector(".die-remove");
-    removeBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      removeDie(die.id);
-    });
 
     face.addEventListener("click", () => rollDie(die.id));
 
@@ -407,18 +399,19 @@
     const die = defaultDie();
     dice.push(die);
     diceContainer.appendChild(buildDieCard(die));
-    updateRemoveButtonsVisibility();
+    updateRemoveDieBtn();
     updateSumDisplay();
     saveDice();
     showToast("Würfel hinzugefügt");
   }
 
-  function removeDie(id) {
+  function removeLastDie() {
     if (dice.length <= 1) return;
-    const node = diceContainer.querySelector(`.die-card[data-id="${id}"]`);
-    dice = dice.filter((d) => d.id !== id);
+    const last = dice[dice.length - 1];
+    const node = diceContainer.querySelector(`.die-card[data-id="${last.id}"]`);
+    dice = dice.filter((d) => d.id !== last.id);
     saveDice();
-    updateRemoveButtonsVisibility();
+    updateRemoveDieBtn();
     updateSumDisplay();
     if (node) {
       node.classList.add("removing");
@@ -460,6 +453,7 @@
 
   document.getElementById("roll-all-btn").addEventListener("click", rollAll);
   document.getElementById("add-die-btn").addEventListener("click", addDie);
+  removeDieBtn.addEventListener("click", removeLastDie);
   document.getElementById("reset-btn").addEventListener("click", () => {
     if (confirm("Wirklich alle Würfel entfernen und zurücksetzen?")) resetAll();
   });

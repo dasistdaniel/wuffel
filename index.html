@@ -29,7 +29,10 @@
 
     <div class="toolbar">
       <button id="roll-all-btn" class="btn btn-primary">🎲 Alle würfeln</button>
-      <button id="add-die-btn" class="btn btn-secondary">➕ Würfel</button>
+      <div class="stepper">
+        <button id="remove-die-btn" class="btn btn-secondary stepper-btn" title="Würfel entfernen" aria-label="Würfel entfernen">➖ Würfel</button>
+        <button id="add-die-btn" class="btn btn-secondary stepper-btn" title="Würfel hinzufügen" aria-label="Würfel hinzufügen">➕ Würfel</button>
+      </div>
       <select id="preset-select" class="btn btn-ghost" aria-label="Vorlage wählen">
         <option value="" selected disabled>📋 Vorlagen</option>
         <option value="w6x1">1 × W6</option>
@@ -62,7 +65,6 @@
 
   <template id="die-template">
     <div class="die-card">
-      <button class="die-remove" title="Würfel entfernen" aria-label="Würfel entfernen">✕</button>
       <button class="die-face" type="button" aria-label="Würfel werfen">
         <div class="die-face-inner"></div>
       </button>
