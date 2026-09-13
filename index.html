@@ -37,6 +37,12 @@
   </header>
 
   <main>
+    <div class="stepper" role="group" aria-label="Anzahl Würfel">
+      <button id="remove-die-btn" class="stepper-btn" aria-label="Würfel entfernen">−</button>
+      <span class="stepper-count"><span id="dice-count">1</span> Würfel</span>
+      <button id="add-die-btn" class="stepper-btn" aria-label="Würfel hinzufügen">+</button>
+    </div>
+
     <div id="dice-container" class="dice-container" aria-live="polite"></div>
 
     <div id="sum-display" class="sum-display" hidden aria-live="polite">
@@ -45,12 +51,6 @@
 
     <div class="toolbar">
       <button id="roll-all-btn" class="btn btn-primary btn-large">🎲 Alle würfeln</button>
-
-      <div class="stepper" role="group" aria-label="Anzahl Würfel">
-        <button id="remove-die-btn" class="stepper-btn" aria-label="Würfel entfernen">−</button>
-        <span class="stepper-count"><span id="dice-count">1</span> Würfel</span>
-        <button id="add-die-btn" class="stepper-btn" aria-label="Würfel hinzufügen">+</button>
-      </div>
 
       <div class="toolbar-utility">
         <select id="preset-select" class="btn btn-ghost" aria-label="Vorlage wählen">
