@@ -20,6 +20,9 @@
   const dieTemplate = document.getElementById("die-template");
   const toastEl = document.getElementById("toast");
   const muteBtn = document.getElementById("mute-btn");
+  const sumDisplayEl = document.getElementById("sum-display");
+  const sumValueEl = document.getElementById("sum-value");
+  const presetSelect = document.getElementById("preset-select");
 
   let colorCursor = 0;
   let dice = loadDice();
@@ -78,6 +81,17 @@
     updateMuteBtn();
     if (!muted) ensureAudioCtx();
   });
+
+  function vibrate(pattern) {
+    if (muted) return;
+    if (typeof navigator.vibrate === "function") {
+      try {
+        navigator.vibrate(pattern);
+      } catch (e) {
+        // ignore – vibration not supported/allowed
+      }
+    }
+  }
 
   function uid() {
     return Math.random().toString(36).slice(2, 10);
@@ -158,6 +172,18 @@
     diceContainer.innerHTML = "";
     dice.forEach((die) => diceContainer.appendChild(buildDieCard(die)));
     updateRemoveButtonsVisibility();
+    updateSumDisplay();
+  }
+
+  function updateSumDisplay() {
+    const numericDice = dice.filter((d) => d.type !== "letters");
+    if (numericDice.length < 2) {
+      sumDisplayEl.hidden = true;
+      return;
+    }
+    const sum = numericDice.reduce((total, d) => total + (typeof d.value === "number" ? d.value : 0), 0);
+    sumValueEl.textContent = sum;
+    sumDisplayEl.hidden = false;
   }
 
   function updateRemoveButtonsVisibility() {
@@ -217,6 +243,7 @@
       label.textContent = TYPE_LABELS[die.type] || "?";
       die.value = null;
       updateFaceDisplay(node, die);
+      updateSumDisplay();
       saveDice();
     });
 
@@ -310,14 +337,18 @@
     const cycle = setInterval(() => {
       die.value = randomFrom(pool);
       updateFaceDisplay(node, die);
+      updateSumDisplay();
       playTick();
+      vibrate(12);
       if (performance.now() - startTime >= duration) {
         clearInterval(cycle);
         die.value = randomFrom(pool);
         updateFaceDisplay(node, die);
+        updateSumDisplay();
         face.classList.remove("is-rolling");
         face.classList.add("just-landed");
         playLand();
+        vibrate(35);
         rollingIds.delete(id);
         if (!silent) saveDice();
       }
@@ -335,6 +366,7 @@
     dice.push(die);
     diceContainer.appendChild(buildDieCard(die));
     updateRemoveButtonsVisibility();
+    updateSumDisplay();
     saveDice();
     showToast("Würfel hinzugefügt");
   }
@@ -345,10 +377,28 @@
     dice = dice.filter((d) => d.id !== id);
     saveDice();
     updateRemoveButtonsVisibility();
+    updateSumDisplay();
     if (node) {
       node.classList.add("removing");
       node.addEventListener("animationend", () => node.remove(), { once: true });
     }
+  }
+
+  const PRESETS = {
+    w6x1: [{ type: "d6" }],
+    w6x2: [{ type: "d6" }, { type: "d6" }],
+    kniffel: [{ type: "d6" }, { type: "d6" }, { type: "d6" }, { type: "d6" }, { type: "d6" }],
+    slf: [{ type: "letters" }]
+  };
+
+  function applyPreset(key) {
+    const preset = PRESETS[key];
+    if (!preset) return;
+    colorCursor = 0;
+    dice = preset.map((cfg) => defaultDie(cfg));
+    saveDice();
+    renderAll();
+    showToast("Vorlage geladen");
   }
 
   function resetAll() {
@@ -370,6 +420,10 @@
   document.getElementById("add-die-btn").addEventListener("click", addDie);
   document.getElementById("reset-btn").addEventListener("click", () => {
     if (confirm("Wirklich alle Würfel entfernen und zurücksetzen?")) resetAll();
+  });
+  presetSelect.addEventListener("change", () => {
+    applyPreset(presetSelect.value);
+    presetSelect.value = "";
   });
 
   renderAll();

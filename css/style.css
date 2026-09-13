@@ -364,6 +364,27 @@ main {
   color: white;
 }
 
+select.btn {
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+  text-align-last: center;
+}
+
+select.btn option {
+  color: #2d1b4e;
+}
+
+.sum-display {
+  background: rgba(255,255,255,0.9);
+  color: var(--text-dark);
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
 .app-footer {
   text-align: center;
   color: rgba(255,255,255,0.85);

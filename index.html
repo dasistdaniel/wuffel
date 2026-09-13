@@ -23,11 +23,22 @@
   <main>
     <div id="dice-container" class="dice-container" aria-live="polite"></div>
 
+    <div id="sum-display" class="sum-display" hidden aria-live="polite">
+      Summe: <span id="sum-value">0</span>
+    </div>
+
     <div class="toolbar">
       <button id="roll-all-btn" class="btn btn-primary">🎲 Alle würfeln</button>
       <button id="add-die-btn" class="btn btn-secondary">➕ Würfel</button>
+      <select id="preset-select" class="btn btn-ghost" aria-label="Vorlage wählen">
+        <option value="" selected disabled>📋 Vorlagen</option>
+        <option value="w6x1">1 × W6</option>
+        <option value="w6x2">2 × W6</option>
+        <option value="kniffel">Kniffel (5 × W6)</option>
+        <option value="slf">Stadt-Land-Fluss (Buchstabe)</option>
+      </select>
       <button id="reset-btn" class="btn btn-ghost" title="Auf einen Standard-W6 zurücksetzen">↺ Zurücksetzen</button>
-      <button id="mute-btn" class="btn btn-ghost" title="Ton an/aus" aria-label="Ton an/aus">🔊</button>
+      <button id="mute-btn" class="btn btn-ghost" title="Ton &amp; Vibration an/aus" aria-label="Ton &amp; Vibration an/aus">🔊</button>
     </div>
   </main>
 
