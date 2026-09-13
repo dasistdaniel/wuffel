@@ -38,6 +38,7 @@
         <option value="slf">Stadt-Land-Fluss (Buchstabe)</option>
       </select>
       <button id="reset-btn" class="btn btn-ghost" title="Auf einen Standard-W6 zurücksetzen">↺ Zurücksetzen</button>
+      <button id="settings-btn" class="btn btn-ghost">⚙️ Einstellungen</button>
       <button id="mute-btn" class="btn btn-ghost" title="Ton &amp; Vibration an/aus" aria-label="Ton &amp; Vibration an/aus">🔊</button>
     </div>
   </main>
@@ -49,49 +50,61 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <div id="settings-overlay" class="settings-overlay" hidden>
+    <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+      <div class="settings-modal-header">
+        <h2 id="settings-modal-title">⚙️ Würfel-Einstellungen</h2>
+        <button id="settings-close-btn" class="modal-close" aria-label="Schließen">✕</button>
+      </div>
+      <div id="settings-list" class="settings-list"></div>
+    </div>
+  </div>
+
   <template id="die-template">
     <div class="die-card">
       <button class="die-remove" title="Würfel entfernen" aria-label="Würfel entfernen">✕</button>
       <button class="die-face" type="button" aria-label="Würfel werfen">
         <div class="die-face-inner"></div>
       </button>
-      <div class="die-controls">
-        <span class="die-type-label"></span>
-        <details class="die-settings">
-          <summary>⚙️</summary>
-          <div class="settings-body">
-            <label class="settings-row">
-              Typ
-              <select class="cfg-type">
-                <option value="d4">W4</option>
-                <option value="d6" selected>W6</option>
-                <option value="d8">W8</option>
-                <option value="d10">W10</option>
-                <option value="d12">W12</option>
-                <option value="d20">W20</option>
-                <option value="custom">Zahlenbereich</option>
-                <option value="letters">Buchstaben</option>
-              </select>
-            </label>
-            <label class="settings-row cfg-row-custom" hidden>
-              Von
-              <input class="cfg-min" type="number" value="1" />
-            </label>
-            <label class="settings-row cfg-row-custom" hidden>
-              Bis
-              <input class="cfg-max" type="number" value="6" />
-            </label>
-            <label class="settings-row cfg-row-letters" hidden>
-              Buchstaben
-              <textarea class="cfg-letters" rows="2" spellcheck="false"></textarea>
-            </label>
-            <label class="settings-row">
-              Farbe
-              <input class="cfg-color" type="color" />
-            </label>
-          </div>
-        </details>
+      <span class="die-type-label"></span>
+    </div>
+  </template>
+
+  <template id="settings-item-template">
+    <div class="settings-item">
+      <div class="settings-item-header">
+        <span class="settings-item-swatch"></span>
+        <span class="settings-item-title"></span>
       </div>
+      <label class="settings-row">
+        Typ
+        <select class="cfg-type">
+          <option value="d4">W4</option>
+          <option value="d6">W6</option>
+          <option value="d8">W8</option>
+          <option value="d10">W10</option>
+          <option value="d12">W12</option>
+          <option value="d20">W20</option>
+          <option value="custom">Zahlenbereich</option>
+          <option value="letters">Buchstaben</option>
+        </select>
+      </label>
+      <label class="settings-row cfg-row-custom" hidden>
+        Von
+        <input class="cfg-min" type="number" />
+      </label>
+      <label class="settings-row cfg-row-custom" hidden>
+        Bis
+        <input class="cfg-max" type="number" />
+      </label>
+      <label class="settings-row cfg-row-letters" hidden>
+        Buchstaben
+        <textarea class="cfg-letters" rows="2" spellcheck="false"></textarea>
+      </label>
+      <label class="settings-row">
+        Farbe
+        <input class="cfg-color" type="color" />
+      </label>
     </div>
   </template>
 

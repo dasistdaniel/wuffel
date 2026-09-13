@@ -18,11 +18,16 @@
 
   const diceContainer = document.getElementById("dice-container");
   const dieTemplate = document.getElementById("die-template");
+  const settingsItemTemplate = document.getElementById("settings-item-template");
   const toastEl = document.getElementById("toast");
   const muteBtn = document.getElementById("mute-btn");
   const sumDisplayEl = document.getElementById("sum-display");
   const sumValueEl = document.getElementById("sum-value");
   const presetSelect = document.getElementById("preset-select");
+  const settingsBtn = document.getElementById("settings-btn");
+  const settingsOverlay = document.getElementById("settings-overlay");
+  const settingsCloseBtn = document.getElementById("settings-close-btn");
+  const settingsListEl = document.getElementById("settings-list");
 
   let colorCursor = 0;
   let dice = loadDice();
@@ -211,7 +216,28 @@
 
     face.addEventListener("click", () => rollDie(die.id));
 
-    const details = node.querySelector(".die-settings");
+    updateFaceDisplay(node, die);
+    return node;
+  }
+
+  function refreshDieCard(die) {
+    const node = diceContainer.querySelector(`.die-card[data-id="${die.id}"]`);
+    if (!node) return;
+    node.querySelector(".die-face").style.setProperty("--die-color", die.color);
+    node.querySelector(".die-type-label").textContent = TYPE_LABELS[die.type] || "?";
+    updateFaceDisplay(node, die);
+  }
+
+  function renderSettingsList() {
+    settingsListEl.innerHTML = "";
+    dice.forEach((die, index) => settingsListEl.appendChild(buildSettingsItem(die, index)));
+  }
+
+  function buildSettingsItem(die, index) {
+    const node = settingsItemTemplate.content.firstElementChild.cloneNode(true);
+
+    const swatch = node.querySelector(".settings-item-swatch");
+    const title = node.querySelector(".settings-item-title");
     const typeSelect = node.querySelector(".cfg-type");
     const minInput = node.querySelector(".cfg-min");
     const maxInput = node.querySelector(".cfg-max");
@@ -220,6 +246,8 @@
     const customRows = node.querySelectorAll(".cfg-row-custom");
     const lettersRow = node.querySelector(".cfg-row-letters");
 
+    swatch.style.background = die.color;
+    title.textContent = `Würfel ${index + 1}`;
     typeSelect.value = die.type;
     minInput.value = die.min;
     maxInput.value = die.max;
@@ -234,15 +262,11 @@
     }
     syncVisibility();
 
-    // Prevent details/summary click from bubbling to face roll behavior
-    details.addEventListener("click", (e) => e.stopPropagation());
-
     typeSelect.addEventListener("change", () => {
       die.type = typeSelect.value;
       syncVisibility();
-      label.textContent = TYPE_LABELS[die.type] || "?";
       die.value = null;
-      updateFaceDisplay(node, die);
+      refreshDieCard(die);
       updateSumDisplay();
       saveDice();
     });
@@ -250,21 +274,21 @@
     minInput.addEventListener("change", () => {
       die.min = parseInt(minInput.value, 10) || 0;
       die.value = null;
-      updateFaceDisplay(node, die);
+      refreshDieCard(die);
       saveDice();
     });
 
     maxInput.addEventListener("change", () => {
       die.max = parseInt(maxInput.value, 10) || 0;
       die.value = null;
-      updateFaceDisplay(node, die);
+      refreshDieCard(die);
       saveDice();
     });
 
     lettersArea.addEventListener("input", () => {
       die.letters = lettersArea.value.toUpperCase();
       die.value = null;
-      updateFaceDisplay(node, die);
+      refreshDieCard(die);
     });
     lettersArea.addEventListener("change", () => {
       lettersArea.value = lettersArea.value.toUpperCase();
@@ -273,13 +297,31 @@
 
     colorInput.addEventListener("input", () => {
       die.color = colorInput.value;
-      face.style.setProperty("--die-color", die.color);
+      swatch.style.background = die.color;
+      refreshDieCard(die);
       saveDice();
     });
 
-    updateFaceDisplay(node, die);
     return node;
   }
+
+  function openSettings() {
+    renderSettingsList();
+    settingsOverlay.hidden = false;
+  }
+
+  function closeSettings() {
+    settingsOverlay.hidden = true;
+  }
+
+  settingsBtn.addEventListener("click", openSettings);
+  settingsCloseBtn.addEventListener("click", closeSettings);
+  settingsOverlay.addEventListener("click", (e) => {
+    if (e.target === settingsOverlay) closeSettings();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !settingsOverlay.hidden) closeSettings();
+  });
 
   function updateFaceDisplay(node, die) {
     const inner = node.querySelector(".die-face-inner");
